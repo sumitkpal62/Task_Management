@@ -1,76 +1,56 @@
 import { useRef } from "react";
 import Inputs from "./Inputs";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 
-const NewProject = ({ setProjectsState }) => {
+const NewProject = ({ setProjects, setSelectedProjectId }) => {
   const title = useRef();
   const description = useRef();
   const dueDate = useRef();
 
-  function addNewProject() {
-    const project = {
-      id: Math.random(),
-      title: title.current.value,
-      description: description.current.value,
-      dueDate: dueDate.current.value,
+  function handleAddProject() {
+    const newProject = {
+      id: crypto.randomUUID(),
+      title: title.current.value.trim(),
+      description: description.current.value.trim(),
+      date: dueDate.current.value,
+      tasks: [],
     };
 
-    if (
-      project.title == "" ||
-      project.description == "" ||
-      project.dueDate == ""
-    ) {
-      toast.error("Enter the data");
+    if (!newProject.title || !newProject.description || !newProject.date) {
+      toast.error("Please fill out all fields.");
       return;
     }
 
-    setProjectsState((prevState) => {
-      const currState = {
-        ...prevState,
-        selectedProject: undefined,
-        projects: [...prevState.projects, project],
-      };
-      return currState;
-    });
-    toast.success("Project added successfully");
+    setProjects((prev) => [...prev, newProject]);
+    setSelectedProjectId(undefined);
+    toast.success("Project added successfully!");
   }
 
-  function cancelButton() {
-    setProjectsState((prevState) => {
-      const currState = {
-        ...prevState,
-        selectedProject: undefined,
-      };
-      return currState;
-    });
+  function handleCancel() {
+    setSelectedProjectId(undefined);
   }
 
   return (
-    <>
-      <div className="w-[35rem] mt-16">
-        <menu className="flex items-center justify-end gap-4 my-4">
-          <li>
-            <button
-              onClick={cancelButton}
-              className="text-stone-800 hover:text-stone-950"
-            >
-              Cancel
-            </button>
-          </li>
-          <li>
-            <button
-              onClick={addNewProject}
-              className="bg-stone-800 text-stone-50 hover:bg-stone-950 px-6 py-2 rounded-md"
-            >
-              Save
-            </button>
-          </li>
-        </menu>
-        <Inputs ref={title} label={"Title"} />
-        <Inputs ref={description} label={"Description"} isTextArea />
-        <Inputs ref={dueDate} type="date" label={"Due Date"} />
+    <div className="w-[35rem] mt-16">
+      <div className="flex items-center justify-end gap-4 my-4">
+        <button
+          onClick={handleCancel}
+          className="text-stone-800 hover:text-stone-950"
+        >
+          Cancel
+        </button>
+        <button
+          onClick={handleAddProject}
+          className="bg-stone-800 text-stone-50 hover:bg-stone-950 px-6 py-2 rounded-md"
+        >
+          Save
+        </button>
       </div>
-    </>
+
+      <Inputs ref={title} label="Title" />
+      <Inputs ref={description} label="Description" isTextArea />
+      <Inputs ref={dueDate} type="date" label="Due Date" />
+    </div>
   );
 };
 

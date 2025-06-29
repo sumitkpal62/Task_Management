@@ -1,11 +1,14 @@
-const Inputs = ({ label, isTextArea, ...props }) => {
+const InputField = ({ label, isTextArea = false, id, name, ...props }) => {
+  const inputId = id || label.toLowerCase().replace(/\s+/g, "-");
+
   const classes =
     "w-full p-1 border-b-2 bg-stone-50 rounded border-stone-300 text-stone-600 focus:bg-stone-50 focus:outline-none focus:border-stone-500";
+
   return (
-    <p className="px flex flex-col gap-1 my-4">
+    <div className="flex flex-col gap-1 my-4">
       <label
-        className="text-sm font-bold uppercase text-stone-500 "
-        htmlFor={label}
+        className="text-sm font-bold uppercase text-stone-500"
+        htmlFor={inputId}
       >
         {label}
       </label>
@@ -13,19 +16,21 @@ const Inputs = ({ label, isTextArea, ...props }) => {
         <textarea
           placeholder={`Enter ${label}`}
           className={classes}
-          id={label}
+          id={inputId}
+          name={name || inputId}
           {...props}
         />
       ) : (
         <input
-          className={classes}
           placeholder={`Enter ${label}`}
-          id={label}
+          className={classes}
+          id={inputId}
+          name={name || inputId}
           {...props}
         />
       )}
-    </p>
+    </div>
   );
 };
 
-export default Inputs;
+export default InputField;
