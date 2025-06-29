@@ -10,9 +10,19 @@ const Inputs = ({ label, isTextArea, ...props }) => {
         {label}
       </label>
       {isTextArea ? (
-        <textarea className={classes} id={label} {...props} />
+        <textarea
+          placeholder={`Enter ${label}`}
+          className={classes}
+          id={label}
+          {...props}
+        />
       ) : (
-        <input className={classes} id={label} {...props} />
+        <input
+          className={classes}
+          placeholder={`Enter ${label}`}
+          id={label}
+          {...props}
+        />
       )}
     </p>
   );
